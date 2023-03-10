@@ -1,5 +1,6 @@
 module "vpc" {
   source               = "./modules/vpc"
+  tags                 = { Name = "sandbox-tynar" }
   availability_zones   = var.availability_zones
   cidr_block           = var.cidr_block
   region               = var.region
