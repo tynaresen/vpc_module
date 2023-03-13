@@ -26,8 +26,30 @@ jobs:
     # Initialize working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       id: init
-      run: terraform init 
-    
+      run: terraform init
+
+    # This step should create a tfvar on the go, using secrets
+    - name: Create tfvars file
+      env:
+        REGION: ${{ secrets.REGION }}
+        CIDR_BLOCK: ${{ secrets.CIDR_BLOCK }}
+        PUBLIC_SUBNETS_CIDR: ${{ secrets.PUBLIC_SUBNETS_CIDR }}
+        PRIVATE_SUBNETS_CIDR: ${{ secrets.PRIVATE_SUBNETS_CIDR }}
+        AVAILABILITY_ZONES: ${{ secrets.AVAILABILITY_ZONES }}
+        PRIVATE_SUBNETS: ${{ secrets.PRIVATE_SUBNETS }}
+        PUBLIC_SUBNETS: ${{ secrets.PUBLIC_SUBNETS }}
+      run: |
+        cat <<EOF > terraform.tfvars
+        region="$REGION\"
+        cidr_block="$CIDR_BLOCK"
+        public_subnets_cidr="[$PUBLIC_SUBNETS_CIDR]"
+        private_subnets_cidr="[$PRIVATE_SUBNETS_CIDR]"
+        availability_zones="[$AVAILABILITY_ZONES]"
+        private_subnets="[$PRIVATE_SUBNETS]"
+        public_subnets="[$PUBLIC_SUBNETS]"
+        EOF
+      shell: bash
+  
     # Checks that all Terraform configuration files adhere to a canonical format and style
     - name: Terraform Format
       id: fmt
@@ -43,5 +65,3 @@ jobs:
       id: plan
       if: github.event_name == 'pull_request'
       run: terraform plan -no-color
-
-
