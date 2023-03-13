@@ -53,3 +53,5 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: terraform plan -no-color
+      with: 
+        cli_config_credentials_token: ${{ secrets.AWS_TOKEN }}
