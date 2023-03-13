@@ -40,4 +40,7 @@ variable "availability_zones" {
 variable "tags" {
   description = "This is the name of the resources"
   type        = map(string)
+  default = {
+    "Name" = "sandbox-tynar"
+  }
 }
