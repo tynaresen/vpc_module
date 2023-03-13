@@ -39,15 +39,15 @@ jobs:
         PRIVATE_SUBNETS: ${{ secrets.PRIVATE_SUBNETS }}
         PUBLIC_SUBNETS: ${{ secrets.PUBLIC_SUBNETS }}
       run: |
-        cat <<EOF > terraform.tfvars
-        region="$REGION\"
-        cidr_block="$CIDR_BLOCK"
-        public_subnets_cidr="[$PUBLIC_SUBNETS_CIDR]"
-        private_subnets_cidr="[$PRIVATE_SUBNETS_CIDR]"
-        availability_zones="[$AVAILABILITY_ZONES]"
-        private_subnets="[$PRIVATE_SUBNETS]"
-        public_subnets="[$PUBLIC_SUBNETS]"
-        EOF
+        cat << EOF > terraform.tfvars
+region="$REGION\"
+cidr_block="$CIDR_BLOCK"
+public_subnets_cidr="[$PUBLIC_SUBNETS_CIDR]"
+private_subnets_cidr="[$PRIVATE_SUBNETS_CIDR]"
+availability_zones="[$AVAILABILITY_ZONES]"
+private_subnets="[$PRIVATE_SUBNETS]"
+public_subnets="[$PUBLIC_SUBNETS]"
+EOF
       shell: bash
   
     # Checks that all Terraform configuration files adhere to a canonical format and style
