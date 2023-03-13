@@ -52,5 +52,4 @@ jobs:
     # Evaluates and generates an execution plan for Terraform
     - name: Terraform Plan
       id: plan
-      if: github.event_name == 'pull_request'
       run: terraform plan -no-color
