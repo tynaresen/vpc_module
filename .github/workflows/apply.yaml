@@ -17,28 +17,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-# # This step should create a tfvar on the go, using secrets
-#     - name: Create tfvars file
-#       env:
-#         REGION: ${{ secrets.REGION }}
-#         CIDR_BLOCK: ${{ secrets.CIDR_BLOCK }}
-#         PUBLIC_SUBNETS_CIDR: ${{ secrets.PUBLIC_SUBNETS_CIDR }}
-#         PRIVATE_SUBNETS_CIDR: ${{ secrets.PRIVATE_SUBNETS_CIDR }}
-#         AVAILABILITY_ZONES: ${{ secrets.AVAILABILITY_ZONES }}
-#         PRIVATE_SUBNETS: ${{ secrets.PRIVATE_SUBNETS }}
-#         PUBLIC_SUBNETS: ${{ secrets.PUBLIC_SUBNETS }}
-#       run: |
-#         echo "region=\"$REGION\"" >> terraform.tfvars
-#         echo "cidr_block=\"$CIDR_BLOCK\"" >> terraform.tfvars
-#         echo "public_subnets_cidr=[$PUBLIC_SUBNETS_CIDR]" >> terraform.tfvars
-#         echo "private_subnets_cidr=[$PRIVATE_SUBNETS_CIDR]" >> terraform.tfvars
-#         echo "availability_zones=[$AVAILABILITY_ZONES]" >> terraform.tfvars
-#         echo "private_subnets=[$PRIVATE_SUBNETS]" >> terraform.tfvars
-#         echo "public_subnets=[$PUBLIC_SUBNETS]" >> terraform.tfvars
-#       shell: bash
-
     # Install Terraform CLI and configure the Terraform CLI configuration file
     - name: Terraform Setup
+      uses: hashicorp/setup-terraform@v2
       with: 
         cli_config_credentials_token: ${{ secrets.AWS_TOKEN }}
   
