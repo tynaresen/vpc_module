@@ -79,6 +79,8 @@ resource "aws_route_table_association" "public" {
 #     cidr_blocks = ["73.143.65.89/32"]
 #   }
 
+#cidr block in sec group can be also declared as a variable
+#only if we will use vpn we can used cidr blocks written as a hardcodded cidr blocks
 
 #   egress {
 #     from_port   = 0
