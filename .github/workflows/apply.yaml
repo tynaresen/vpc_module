@@ -37,11 +37,10 @@ jobs:
 #         echo "public_subnets=[$PUBLIC_SUBNETS]" >> terraform.tfvars
 #       shell: bash
 
-    # # Install Terraform CLI and configure the Terraform CLI configuration file
-    # - name: Terraform Setup
-    #   uses: hashicorp/setup-terraform@v1
-    #   with: 
-    #     cli_config_credentials_token: ${{ secrets.AWS_TOKEN }}
+    # Install Terraform CLI and configure the Terraform CLI configuration file
+    - name: Terraform Setup
+      with: 
+        cli_config_credentials_token: ${{ secrets.AWS_TOKEN }}
   
     # # Initialize working directory by creating initial files, loading any remote state, downloading modules, etc.
     # - name: Terraform Init
