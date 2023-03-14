@@ -28,11 +28,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+        aws-region: us-east-1
+
     # Install Terraform CLI and configure the Terraform CLI configuration file
     - name: Terraform Setup
       uses: hashicorp/setup-terraform@v2
       with: 
-        cli_config_credentials_token: ${{ secrets.AWS_TOKEN }}
+        cli_config_credentials_token: ${{ secrets.AWS_SESSION_TOKEN }}
   
     # Initialize working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -53,5 +61,3 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: terraform plan -no-color
-      with: 
-        cli_config_credentials_token: ${{ secrets.AWS_TOKEN }}
