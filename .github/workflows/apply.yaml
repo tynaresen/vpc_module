@@ -8,29 +8,25 @@ on:
      
  
 jobs:
-
-  # create-tfvars:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Make envfile
-  #     uses: SpicyPizza/create-envfile@v1.3      
-  #     with:
-  #       envkey_region: ${{ secrets.REGION }}
-  #       envkey_private_subnets: "[${{ secrets.PRIVATE_SUBNETS }}]"
-  #       file_name: terraform.tfvars
-
   terraform:
-    name: 'Terraform'
-    runs-on: ubuntu-latest 
-
+    name: Terraform
+    runs-on: ubuntu-latest
+    # https://github.com/aws-actions/configure-aws-credentials/issues/271#issuecomment-931012696
     permissions:
       id-token: write
       contents: write
-        
     steps:
-    # Checkout the repository 
     - name: Checkout code
       uses: actions/checkout@v3
+      
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: us-east-1
+        role-session-name: AWS
 
     # - name: Configure AWS credentials
     #   uses: aws-actions/configure-aws-credentials@v2
@@ -50,12 +46,6 @@ jobs:
     # Install Terraform CLI and configure the Terraform CLI configuration file
     - name: Terraform Setup
       uses: hashicorp/setup-terraform@v2
-      with: 
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-        terraform_version: 1.0.7
-        terraform_wrapper: true 
 
     # Initialize working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
