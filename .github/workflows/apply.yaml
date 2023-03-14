@@ -19,89 +19,80 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: us-east-1
+        role-session-name: AWS
+
     # - name: Configure AWS Credentials
-    #   uses: aws-actions/configure-aws-credentials@v2
-    #   with:
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-    #     aws-region: us-east-1
-    #     role-session-name: AWS
-
-    # - name: Configure AWS credentials
-    #   uses: aws-actions/configure-aws-credentials@v2
-    #   with:
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-    #     aws-region: us-east-1
-    #     role-session-name: AWS
-
-    # # - name: Configure AWS Credentials
-    # #   run: | 
-    # #     aws configure set aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    # #     aws configure set aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    # #     aws configure set region us-east-1
+    #   run: | 
+    #     aws configure set aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws configure set aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws configure set region us-east-1
 
     # Install Terraform CLI and configure the Terraform CLI configuration file
-    - name: Terraform Setup
-      uses: hashicorp/setup-terraform@v2
-      with:
-        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
-        terraform_version: 1.0.7
-        terraform_wrapper: true
+    # - name: Terraform Setup
+    #   uses: hashicorp/setup-terraform@v2
+      # with:
+      #   aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #   aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+      #   terraform_version: 1.0.7
+      #   terraform_wrapper: true
 
-    # Initialize working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      id: init
-      run: terraform init 
+    # # Initialize working directory by creating initial files, loading any remote state, downloading modules, etc.
+    # - name: Terraform Init
+    #   id: init
+    #   run: terraform init 
       
-    # Checks that all Terraform configuration files adhere to a canonical format and style
-    - name: Terraform Format
-      id: fmt
-      run: terraform fmt 
-      continue-on-error: true
+    # # Checks that all Terraform configuration files adhere to a canonical format and style
+    # - name: Terraform Format
+    #   id: fmt
+    #   run: terraform fmt 
+    #   continue-on-error: true
     
-    # Validates the configuration
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate -no-color 
+    # # Validates the configuration
+    # - name: Terraform Validate
+    #   id: validate
+    #   run: terraform validate -no-color 
   
-    # Evaluates and generates an execution plan for Terraform
-    - name: Terraform Plan
-      id: plan
-      if: github.event_name == 'pull_request'
-      run: terraform plan -no-color
+    # # Evaluates and generates an execution plan for Terraform
+    # - name: Terraform Plan
+    #   id: plan
+    #   if: github.event_name == 'pull_request'
+    #   run: terraform plan -no-color
 
-    - name: Update Pull Request
-      uses: actions/github-script@0.9.0
-      if: github.event_name == 'pull_request'
-      env:
-        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-      with:
-        script: |
-          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-          <details><summary>Show Plan</summary>
-          \`\`\`\n
-          ${process.env.PLAN}
-          \`\`\`
-          </details>
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+    # - name: Update Pull Request
+    #   uses: actions/github-script@0.9.0
+    #   if: github.event_name == 'pull_request'
+    #   env:
+    #     PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+    #   with:
+    #     script: |
+    #       const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+    #       #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+    #       #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+    #       #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+    #       <details><summary>Show Plan</summary>
+    #       \`\`\`\n
+    #       ${process.env.PLAN}
+    #       \`\`\`
+    #       </details>
+    #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
           
-          github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: output
-          })
+    #       github.issues.createComment({
+    #         issue_number: context.issue.number,
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         body: output
+    #       })
           
-      # On push to master, build or change infrastructure according to Terraform configuration files
-    - name: Terraform Apply
-      id: apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve
+    #   # On push to master, build or change infrastructure according to Terraform configuration files
+    # - name: Terraform Apply
+    #   id: apply
+    #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    #   run: terraform apply -auto-approve
