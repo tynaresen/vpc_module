@@ -9,15 +9,15 @@ on:
  
 jobs:
 
-  create-tfvars:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Make envfile
-      uses: SpicyPizza/create-envfile@v1.3      
-      with:
-        envkey_region: ${{ secrets.REGION }}
-        envkey_private_subnets: "[${{ secrets.PRIVATE_SUBNETS }}]"
-        file_name: terraform.tfvars
+  # create-tfvars:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Make envfile
+  #     uses: SpicyPizza/create-envfile@v1.3      
+  #     with:
+  #       envkey_region: ${{ secrets.REGION }}
+  #       envkey_private_subnets: "[${{ secrets.PRIVATE_SUBNETS }}]"
+  #       file_name: terraform.tfvars
 
   terraform:
     name: 'Terraform'
@@ -36,28 +36,28 @@ jobs:
         aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    # Install Terraform CLI and configure the Terraform CLI configuration file
-    - name: Terraform Setup
-      uses: hashicorp/setup-terraform@v2
-      with: 
-        cli_config_credentials_token: ${{ secrets.AWS_SESSION_TOKEN }}
+    # # Install Terraform CLI and configure the Terraform CLI configuration file
+    # - name: Terraform Setup
+    #   uses: hashicorp/setup-terraform@v2
+    #   with: 
+    #     cli_config_credentials_token: ${{ secrets.AWS_SESSION_TOKEN }}
   
-    # Initialize working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      id: init
-      run: terraform init
+    # # Initialize working directory by creating initial files, loading any remote state, downloading modules, etc.
+    # - name: Terraform Init
+    #   id: init
+    #   run: terraform init
   
-    # Checks that all Terraform configuration files adhere to a canonical format and style
-    - name: Terraform Format
-      id: fmt
-      run: terraform fmt 
+    # # Checks that all Terraform configuration files adhere to a canonical format and style
+    # - name: Terraform Format
+    #   id: fmt
+    #   run: terraform fmt 
     
-    # Validates the configuration
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate -no-color
+    # # Validates the configuration
+    # - name: Terraform Validate
+    #   id: validate
+    #   run: terraform validate -no-color
   
-    # Evaluates and generates an execution plan for Terraform
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan -no-color
+    # # Evaluates and generates an execution plan for Terraform
+    # - name: Terraform Plan
+    #   id: plan
+    #   run: terraform plan -no-color
