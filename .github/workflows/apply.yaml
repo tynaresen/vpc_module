@@ -52,11 +52,11 @@ jobs:
       id: init
       run: terraform init 
       
-    # # Checks that all Terraform configuration files adhere to a canonical format and style
-    # - name: Terraform Format
-    #   id: fmt
-    #   run: terraform fmt 
-    #   continue-on-error: true
+    # Checks that all Terraform configuration files adhere to a canonical format and style
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt 
+      continue-on-error: true
     
     # # Validates the configuration
     # - name: Terraform Validate
