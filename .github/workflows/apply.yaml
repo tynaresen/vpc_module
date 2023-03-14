@@ -34,7 +34,7 @@ jobs:
     #     aws configure set aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     #     aws configure set region us-east-1
 
-    Install Terraform CLI and configure the Terraform CLI configuration file
+    #Install Terraform CLI and configure the Terraform CLI configuration file
     - name: Terraform Setup
       uses: hashicorp/setup-terraform@v2
       with:
