@@ -5,7 +5,7 @@ variable "cidr_block" {
 
 variable "region" {
   description = "Region for the VPC"
-  default = "us-eat-1"
+  default = "us-east-1"
 }
 
 variable "public_subnets_cidr" {
